@@ -35,7 +35,7 @@ body{
   }
 }
 
-/* Box */
+/* Question Box */
 .box{
   position:absolute;
   top:50%;
@@ -72,10 +72,47 @@ button{
   color:white;
 }
 
+/* Response Page */
 .response{
   text-align:center;
-  margin-top:15%;
   color:white;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
+  animation:fadeIn 1s ease;
+}
+
+.response h1{
+  font-size:56px;
+  text-shadow:0 4px 10px rgba(0,0,0,0.3);
+  margin:0;
+}
+
+.response p{
+  font-size:24px;
+  text-shadow:0 3px 8px rgba(0,0,0,0.3);
+  margin:10px 0 20px 0;
+}
+
+.response img{
+  width:230px;
+  max-width:80%;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+.response h2{
+  font-size:30px;
+  margin-top:20px;
+  text-shadow:0 3px 8px rgba(0,0,0,0.3);
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.9);}
+  to{opacity:1; transform:scale(1);}
 }
 </style>
 </head>
@@ -93,7 +130,11 @@ button{
 <script>
 const hearts=document.getElementById("hearts");
 
-/* Hearts */
+/* Preload cat GIF once */
+const catImg = new Image();
+catImg.src = "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif";
+
+/* Hearts generator */
 setInterval(()=>{
   const h=document.createElement("div");
   h.className="heart";
@@ -104,20 +145,41 @@ setInterval(()=>{
   setTimeout(()=>h.remove(),5000);
 },160);
 
-/* YES */
-function love(){
-  document.body.innerHTML=`
-  <div class="response">
-    <h1>Yay!! 💕 Best decision ever 😍</h1>
-    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
-  </div>`;
+/* YES Click */
+function love() {
+  // Use preloaded cat image directly
+  document.body.innerHTML = `
+    <div class="response" style="gap:25px;">
+      <h1 style="
+        font-size:70px;
+        text-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      "><b>Yay!</b> 🎉</h1>
+
+      <p style="
+        font-size:32px;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      ">Best decision ever made</p>
+
+      <img src="${catImg.src}" style="
+        width:350px;
+        max-width:90%;
+        border-radius:25px;
+        box-shadow:0 12px 30px rgba(0,0,0,0.35);
+      ">
+
+      <h2 style="
+        font-size:38px;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      ">I love you 💖</h2>
+    </div>
+  `;
 }
 
-/* NO Dodge — REAL FIX */
+
+/* NO Dodge */
 function run(){
   const btn=document.getElementById("no");
 
-  /* Move button to body so it's free */
   if(btn.parentElement!==document.body){
     document.body.appendChild(btn);
   }
