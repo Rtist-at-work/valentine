@@ -1,26 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>For You 💕</title>
 
 <style>
 body{
   margin:0;
   overflow:hidden;
-  font-family:'Comic Sans MS',cursive;
+  font-family:"Comic Sans MS",cursive;
   background:linear-gradient(135deg,#ff758c,#ff7eb3,#ffb199);
   height:100vh;
 }
 
-/* Hearts Layer */
+/* Hearts */
 #hearts{
   position:fixed;
-  width:100%;
-  height:100%;
-  top:0;
-  left:0;
+  inset:0;
   z-index:1;
   pointer-events:none;
 }
@@ -29,12 +26,13 @@ body{
   position:absolute;
   bottom:-20px;
   animation:floatUp 5s linear infinite;
-  opacity:.9;
 }
 
 @keyframes floatUp{
-  0%{transform:translateY(0) scale(1);}
-  100%{transform:translateY(-110vh) scale(1.6);opacity:0;}
+  100%{
+    transform:translateY(-110vh) scale(1.6);
+    opacity:0;
+  }
 }
 
 /* Box */
@@ -47,32 +45,21 @@ body{
   padding:5vw;
   border-radius:25px;
   text-align:center;
-  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  box-shadow:0 15px 35px rgba(0,0,0,0.25);
   width:90%;
   max-width:420px;
   z-index:10;
-  animation:pop 1s ease;
 }
 
-@keyframes pop{
-  from{transform:translate(-50%,-50%) scale(.7);}
-  to{transform:translate(-50%,-50%) scale(1);}
-}
+h2{color:#ff2e63;}
 
-h2{
-  color:#ff2e63;
-  font-size:clamp(18px,4vw,26px);
-}
-
-/* Buttons */
 button{
   padding:12px 20px;
   margin:10px;
   border:none;
   border-radius:25px;
-  font-size:clamp(14px,3.5vw,18px);
+  font-size:18px;
   cursor:pointer;
-  transition:.3s;
 }
 
 #yes{
@@ -83,25 +70,12 @@ button{
 #no{
   background:#888;
   color:white;
-  position:relative;
 }
 
-button:hover{
-  transform:scale(1.1);
-}
-
-/* Response Page */
 .response{
   text-align:center;
   margin-top:15%;
   color:white;
-}
-
-.response img{
-  width:220px;
-  max-width:70%;
-  border-radius:20px;
-  margin-top:20px;
 }
 </style>
 </head>
@@ -110,46 +84,57 @@ button:hover{
 
 <div id="hearts"></div>
 
-<div class="box">
+<div class="box" id="box">
   <h2>Do you like me? 💖</h2>
   <button id="yes" onclick="love()">Yes 😍</button>
-  <button id="no" onmouseover="run()">No 😜</button>
+  <button id="no" onmouseenter="run()" ontouchstart="run()">No 😜</button>
 </div>
 
 <script>
-const heartsContainer=document.getElementById("hearts");
+const hearts=document.getElementById("hearts");
 
 /* Hearts */
 setInterval(()=>{
-  const heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML="💖";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.fontSize=(25+Math.random()*35)+"px";
-  heartsContainer.appendChild(heart);
-  setTimeout(()=>heart.remove(),5000);
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=(25+Math.random()*35)+"px";
+  hearts.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
 },160);
 
-/* Yes Click -> show GIF here */
+/* YES */
 function love(){
   document.body.innerHTML=`
   <div class="response">
-    <h1 style="font-size:clamp(28px,8vw,60px);">
-      Yay!! 💕 Good decision ever made 😍
-    </h1>
+    <h1>Yay!! 💕 Best decision ever 😍</h1>
     <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
   </div>`;
 }
 
-/* No Run */
+/* NO Dodge — REAL FIX */
 function run(){
   const btn=document.getElementById("no");
-  const maxX=window.innerWidth-100;
-  const maxY=window.innerHeight-50;
+
+  /* Move button to body so it's free */
+  if(btn.parentElement!==document.body){
+    document.body.appendChild(btn);
+  }
+
+  const rect=btn.getBoundingClientRect();
+  const padding=10;
+
+  const maxX=window.innerWidth-rect.width-padding;
+  const maxY=window.innerHeight-rect.height-padding;
+
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
 
   btn.style.position="fixed";
-  btn.style.left=Math.random()*maxX+"px";
-  btn.style.top=Math.random()*maxY+"px";
+  btn.style.left=x+"px";
+  btn.style.top=y+"px";
+  btn.style.zIndex="9999";
 }
 </script>
 
